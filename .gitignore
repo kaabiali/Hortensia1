@@ -38,6 +38,9 @@ yarn-error.log*
 # but keep .env.example
 !.env.example
 
+# database
+prisma/dev.db
+
 # vercel
 .vercel
 
