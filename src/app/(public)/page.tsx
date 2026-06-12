@@ -99,7 +99,7 @@ export default async function LandingPage() {
                 Everything we offer to help your business grow.
               </p>
               <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {services.map((service) => (
+                {services.map((service: { id: string; name: string; description: string; order: number }) => (
                   <div
                     key={service.id}
                     className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5 transition-all duration-150 hover:border-[var(--border-hover)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)]"

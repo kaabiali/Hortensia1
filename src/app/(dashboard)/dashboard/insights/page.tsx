@@ -22,19 +22,19 @@ export default async function InsightsPage() {
     _sum: { budget: true },
   })
 
-  const totalBudget = byStatus.reduce((sum, s) => sum + (s._sum.budget ?? 0), 0)
+  const totalBudget = (byStatus as Array<{ _sum: { budget: number | null } }>).reduce((sum, s) => sum + (s._sum.budget ?? 0), 0)
   const averageBudget = totalRequests > 0 ? totalBudget / totalRequests : 0
 
-  const dailyCounts = await db.$queryRaw<Array<{ day: Date; count: bigint }>>`
-    SELECT DATE_TRUNC('day', "createdAt") AS day, COUNT(*)::int AS count
+  const dailyCounts = await db.$queryRaw<Array<{ day: string; count: number }>>`
+    SELECT strftime('%Y-%m-%d', "createdAt") AS day, CAST(COUNT(*) AS INTEGER) AS count
     FROM "ProjectRequest"
     WHERE "userId" = ${userId}
-      AND "createdAt" >= NOW() - INTERVAL '30 days'
+      AND "createdAt" >= datetime('now', '-30 days')
     GROUP BY 1
     ORDER BY 1
   `
 
-  const statusBreakdown = byStatus.map((s) => ({
+  const statusBreakdown = (byStatus as Array<{ status: string; _count: { id: number }; _sum: { budget: number | null } }>).map((s) => ({
     status: s.status,
     count: s._count.id,
     budget: s._sum.budget ?? 0,
@@ -42,12 +42,12 @@ export default async function InsightsPage() {
 
   const averageTimeToInProgressRaw = await db.$queryRaw<Array<{ days: number | null }>>`
     SELECT AVG(
-      EXTRACT(EPOCH FROM (updatedAt - createdAt)) / 86400.0
-    )::float AS days
+      julianday("updatedAt") - julianday("createdAt")
+    ) AS days
     FROM "ProjectRequest"
     WHERE "userId" = ${userId}
       AND status = 'in_progress'
-      AND updatedAt != createdAt
+      AND "updatedAt" != "createdAt"
   `
 
   const avgDays = averageTimeToInProgressRaw[0]?.days
@@ -58,9 +58,9 @@ export default async function InsightsPage() {
     <InsightsClient
       totalRequests={totalRequests}
       averageBudget={averageBudget}
-      dailyCounts={dailyCounts.map((d) => ({
-        day: d.day.toISOString().slice(0, 10),
-        count: Number(d.count),
+      dailyCounts={dailyCounts.map((d: { day: string; count: number }) => ({
+        day: d.day,
+        count: d.count,
       }))}
       statusBreakdown={statusBreakdown}
       averageTimeToInProgress={avgDays}

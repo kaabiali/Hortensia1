@@ -10,18 +10,18 @@ import { EmptyState } from '@/components/app/empty-state'
 import { ErrorState } from '@/components/app/error-state'
 import { DenseToggle } from '@/components/app/dense-toggle'
 
-interface Request {
+export interface RequestData {
   id: string
   title: string
   description: string
   budget: number
-  status: 'pending' | 'in_progress' | 'done'
+  status: string
   createdAt: Date
   updatedAt: Date
   userId: string
 }
 
-export function RequestListClient({ requests }: { requests: Request[] }) {
+export function RequestListClient({ requests }: { requests: RequestData[] }) {
   const [compact, setCompact] = useState(false)
   const [error, setError] = useState<string | null>(null)
 

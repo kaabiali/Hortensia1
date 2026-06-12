@@ -16,7 +16,7 @@ interface Request {
   title: string
   description: string
   budget: number
-  status: 'pending' | 'in_progress' | 'done'
+  status: string
   createdAt: Date
   updatedAt: Date
   userId: string
@@ -96,7 +96,7 @@ export function RequestRow({ request, compact }: { request: Request; compact: bo
         >
           <SelectTrigger className="h-7 border-0 bg-transparent p-0 shadow-none focus:ring-0">
             <SelectValue>
-              <StatusChip status={optimisticStatus} />
+              <StatusChip status={optimisticStatus as 'pending' | 'in_progress' | 'done'} />
             </SelectValue>
           </SelectTrigger>
           <SelectContent align="end">

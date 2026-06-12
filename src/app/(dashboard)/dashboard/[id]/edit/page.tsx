@@ -33,7 +33,7 @@ export default async function EditRequestPage({
           title: request.title,
           description: request.description,
           budget: request.budget,
-          status: request.status,
+          status: request.status as 'pending' | 'in_progress' | 'done',
         }}
       />
     </div>
