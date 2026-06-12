@@ -35,9 +35,9 @@ async function main() {
 
   for (const service of services) {
     await db.service.upsert({
-      where: { id: service.name },
+      where: { name: service.name },
       update: service,
-      create: { id: service.name, ...service },
+      create: service,
     })
   }
 
