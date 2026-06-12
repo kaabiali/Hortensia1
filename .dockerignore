@@ -1,0 +1,14 @@
+node_modules
+.next
+.env
+.env.local
+*.log
+.git
+.gitignore
+coverage
+__tests__
+*.test.ts
+*.spec.ts
+README.md
+ARCHITECTURE.md
+PROJECT_MAP.md

@@ -60,5 +60,26 @@ docker run -p 3000:3000 \
   hortensia-portal
 ```
 
-## Live URL
-<!-- Add your deployed URL here if deployed -->
+## Infrastructure
+
+### Local development
+
+```bash
+docker compose up -d
+cp .env.example .env   # fill in values, especially NEXTAUTH_SECRET
+pnpm install
+pnpm prisma:migrate
+pnpm prisma:seed
+pnpm dev
+```
+
+### Production build
+
+```bash
+docker build -t hortensia-portal .
+docker run -p 3000:3000 --env-file .env hortensia-portal
+```
+
+### Live deploy (optional)
+
+URL: <!-- TODO: add deployed URL here -->

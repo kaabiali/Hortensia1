@@ -1,13 +1,20 @@
 services:
   db:
     image: postgres:16-alpine
+    container_name: hortensia_db
     environment:
-      POSTGRES_DB: hortensia
-      POSTGRES_USER: hortensia
-      POSTGRES_PASSWORD: hortensia
+      POSTGRES_USER: ${POSTGRES_USER:-hortensia}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hortensia}
+      POSTGRES_DB: ${POSTGRES_DB:-hortensia}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-hortensia} -d ${POSTGRES_DB:-hortensia}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 volumes:
   postgres_data:
