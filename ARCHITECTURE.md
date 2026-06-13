@@ -73,6 +73,10 @@ If services were updated more frequently, SSR would be appropriate. For a market
 - Caching: in-process in dev → Vercel Data Cache or Redis in production
 - Secret management: `.env` file locally → environment variables in hosting platform
 
+## A7 — AI Stretch Task
+
+At 1,000 concurrent clicks, Groq's free tier (30 req/min) would rate-limit ~97% of requests, all returning 503 and falling back gracefully to manual submission; to absorb real traffic, add a server-side queue (e.g. BullMQ) with per-user rate limiting and switch to a paid Groq tier or self-hosted Ollama instance.
+
 **Pre-launch checklist:**
 - [ ] `docker build .` succeeds from a clean clone
 - [ ] `NEXTAUTH_SECRET` is set and is not the example value

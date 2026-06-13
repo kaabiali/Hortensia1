@@ -28,15 +28,9 @@ Next.js 16 · TypeScript · Tailwind CSS · shadcn/ui · Prisma · PostgreSQL ·
    # Paste it as NEXTAUTH_SECRET in .env
    ```
 
-3. Start the database and run migrations:
+3. Start the database and start the dev server:
    ```bash
    docker compose up -d
-   npx prisma migrate dev
-   npx prisma db seed
-   ```
-
-4. Start the dev server:
-   ```bash
    pnpm dev
    ```
 
@@ -68,8 +62,6 @@ docker run -p 3000:3000 \
 docker compose up -d
 cp .env.example .env   # fill in values, especially NEXTAUTH_SECRET
 pnpm install
-pnpm prisma:migrate
-pnpm prisma:seed
 pnpm dev
 ```
 
@@ -81,5 +73,54 @@ docker run -p 3000:3000 --env-file .env hortensia-portal
 ```
 
 ### Live deploy (optional)
+
+Deploy on Vercel (free) + Neon (free PostgreSQL).
+
+#### Step 1 — Create a PostgreSQL database
+
+1. Go to [neon.tech](https://neon.tech) and sign up for free
+2. Create a new project (region: closest to you)
+3. Copy the connection string — it looks like:
+   ```
+   postgresql://user:pass@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require
+   ```
+
+#### Step 2 — Push the project to GitHub
+
+```bash
+# Create a repo on github.com, then:
+git remote add origin https://github.com/<your-username>/hortensia-portal.git
+git push -u origin main
+```
+
+#### Step 3 — Deploy on Vercel
+
+1. Go to [vercel.com](https://vercel.com) and sign up for free
+2. Click **Add New → Project** and import your GitHub repo
+3. In **Environment Variables**, add:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Your Neon connection string (from step 1) |
+| `NEXTAUTH_SECRET` | `openssl rand -base64 32` (run this in your terminal) |
+| `NEXTAUTH_URL` | `https://your-project.vercel.app` (you'll get this URL after deploy) |
+| `GROQ_API_KEY` | Your Groq API key (or leave placeholder) |
+
+4. Click **Deploy**
+
+#### Step 4 — Run database migrations
+
+After the first deploy succeeds, open a terminal and run:
+
+```bash
+npx prisma migrate deploy --schema=prisma/schema.prisma
+npx prisma db seed --schema=prisma/schema.prisma
+```
+
+Set `DATABASE_URL` to your Neon connection string for these commands.
+
+#### Step 5 — Done
+
+Your portal is live at `https://your-project.vercel.app`.
 
 URL: <!-- TODO: add deployed URL here -->

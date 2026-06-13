@@ -13,6 +13,7 @@
 | Auth | Auth.js (NextAuth v5) | 5.0.0-beta.31 |
 | Forms | react-hook-form + Zod | 4.4.3 |
 | Charts | Recharts | 3.8.1 |
+| AI | groq-sdk | 1.2.1 |
 | Package manager | pnpm | 11.6.0 |
 | Container runtime | Docker | — |
 | Base image | node | 20-alpine |
@@ -44,7 +45,15 @@ Next.js standalone     →  serves on :3000
 /login  →  Credentials provider  →  JWT token  →  proxy.ts guards /dashboard/*
 ```
 
+**AI Improve flow:**
+```
+Client form → POST /api/ai/improve → Groq API (server-side)
+→ suggestedTitle + refinedDescription + scopeBullets → accept/discard
+```
+
 ## [ORPHANS & PENDING]
 
 - Live deploy URL pending — not yet deployed to any host
 - Prisma datasource currently set to SQLite for local dev without Docker; switch to PostgreSQL in `prisma/schema.prisma` and `.env` for production use
+- Groq streaming: deferred — non-streaming implementation used (< 20 lines overhead for streaming)
+- BullMQ queue: not implemented, noted in ARCHITECTURE.md (A7 — AI Stretch Task)
