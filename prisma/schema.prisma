@@ -3,16 +3,16 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String           @id @default(cuid())
+  email     String           @unique
   password  String
   name      String?
-  createdAt DateTime @default(now())
+  createdAt DateTime         @default(now())
   requests  ProjectRequest[]
 }
 
