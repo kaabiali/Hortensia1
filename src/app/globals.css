@@ -1,61 +1,128 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 :root {
-  --bg: #f8f8f8;
-  --bg-card: #ffffff;
-  --bg-subtle: #f2f2f3;
-  --border: rgba(0, 0, 0, 0.07);
-  --border-hover: rgba(0, 0, 0, 0.13);
-  --text: #111111;
-  --text-muted: #6b6b72;
-  --text-faint: #a0a0a8;
-  --accent: #4f46e5;
-  --accent-soft: #eef2ff;
-  --accent-dim: rgba(79, 70, 229, 0.12);
-  --green: #16a34a;
-  --green-soft: #f0fdf4;
-  --amber: #d97706;
-  --amber-soft: #fffbeb;
-  --red: #dc2626;
-  --red-soft: #fef2f2;
+  --bg: #FAFAFA;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F3F4F6;
+  --bg-sidebar: #FFFFFF;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.14);
+  --text: #111827;
+  --text-muted: #6B7280;
+  --text-faint: #9CA3AF;
+  --accent: #635BFF;
+  --accent-hover: #5145FF;
+  --accent-soft: rgba(99, 91, 255, 0.08);
+  --accent-dim: rgba(99, 91, 255, 0.14);
+  --success: #10B981;
+  --success-soft: #D1FAE5;
+  --warning: #F59E0B;
+  --warning-soft: #FEF3C7;
+  --danger: #EF4444;
+  --danger-soft: #FEE2E2;
   --radius: 8px;
   --radius-sm: 5px;
   --radius-lg: 12px;
+  --radius-xl: 20px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --topbar-height: 56px;
+  --sidebar-width: 240px;
 }
 
 .dark {
-  --bg: #0d0d0f;
-  --bg-card: #161618;
-  --bg-subtle: #1e1e22;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(255, 255, 255, 0.14);
-  --text: #f0f0f0;
-  --text-muted: #8b8b95;
-  --text-faint: #55555e;
-  --accent: #818cf8;
-  --accent-soft: #1e1b3a;
-  --accent-dim: rgba(129, 140, 248, 0.15);
-  --green: #16a34a;
-  --green-soft: #052e16;
-  --amber: #d97706;
-  --amber-soft: #1c1408;
-  --red: #dc2626;
-  --red-soft: #1f0a0a;
+  --bg: #09090B;
+  --bg-card: #111113;
+  --bg-subtle: #18181B;
+  --bg-sidebar: #111113;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --text: #F4F4F5;
+  --text-muted: #A1A1AA;
+  --text-faint: #71717A;
+  --accent: #818CF8;
+  --accent-hover: #6366F1;
+  --accent-soft: rgba(129, 140, 248, 0.1);
+  --accent-dim: rgba(129, 140, 248, 0.18);
+  --success: #10B981;
+  --success-soft: rgba(16, 185, 129, 0.15);
+  --warning: #F59E0B;
+  --warning-soft: rgba(245, 158, 11, 0.15);
+  --danger: #EF4444;
+  --danger-soft: rgba(239, 68, 68, 0.15);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   border-color: var(--border);
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 3px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-subtle) 25%, transparent 50%, var(--bg-subtle) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-count-up {
+  animation: count-up 0.4s ease-out forwards;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .glass {
+  background: rgba(17, 17, 19, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }

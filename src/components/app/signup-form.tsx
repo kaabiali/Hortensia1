@@ -35,34 +35,25 @@ export function SignupForm() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(signupSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      name: '',
-    },
+    defaultValues: { email: '', password: '', name: '' },
   })
 
   async function onSubmit(data: FormValues) {
     setError(null)
-
     const result = await signupUser(data)
-
     if (result.error) {
       setError(result.error)
       return
     }
-
     const signInResult = await signIn('credentials', {
       email: data.email,
       password: data.password,
       redirect: false,
     })
-
     if (signInResult?.error) {
       setError('Account created but sign-in failed. Please try logging in.')
       return
     }
-
     router.push('/dashboard')
     router.refresh()
   }
@@ -77,13 +68,12 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} value={field.value ?? ''} />
+                <Input placeholder="Your name" className="h-10" {...field} value={field.value ?? ''} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="email"
@@ -91,13 +81,12 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="you@example.com" {...field} />
+                <Input type="email" placeholder="you@example.com" className="h-10" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="password"
@@ -105,24 +94,21 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="At least 8 characters" {...field} />
+                <Input type="password" placeholder="At least 8 characters" className="h-10" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         {error && (
-          <p className="text-sm text-[var(--red)]">{error}</p>
+          <p className="text-sm text-[var(--danger)]">{error}</p>
         )}
-
-        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full h-10" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? 'Creating account...' : 'Create account'}
         </Button>
-
         <p className="text-center text-xs text-[var(--text-muted)]">
           Already have an account?{' '}
-          <a href="/login" className="text-[var(--accent)] hover:underline">
+          <a href="/login" className="text-[var(--accent)] hover:underline font-medium">
             Sign in
           </a>
         </p>

@@ -26,26 +26,20 @@ export function LoginForm() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: { email: '', password: '' },
   })
 
   async function onSubmit(data: FormValues) {
     setError(null)
-
     const result = await signIn('credentials', {
       email: data.email,
       password: data.password,
       redirect: false,
     })
-
     if (result?.error) {
       setError('Invalid email or password')
       return
     }
-
     router.push('/dashboard')
     router.refresh()
   }
@@ -60,13 +54,12 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="you@example.com" {...field} />
+                <Input type="email" placeholder="you@example.com" className="h-10" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="password"
@@ -74,24 +67,21 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Enter your password" {...field} />
+                <Input type="password" placeholder="Enter your password" className="h-10" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         {error && (
-          <p className="text-sm text-[var(--red)]">{error}</p>
+          <p className="text-sm text-[var(--danger)]">{error}</p>
         )}
-
-        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full h-10" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
         </Button>
-
         <p className="text-center text-xs text-[var(--text-muted)]">
           Don&apos;t have an account?{' '}
-          <a href="/signup" className="text-[var(--accent)] hover:underline">
+          <a href="/signup" className="text-[var(--accent)] hover:underline font-medium">
             Sign up
           </a>
         </p>
