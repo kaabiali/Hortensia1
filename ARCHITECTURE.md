@@ -3,23 +3,28 @@
 ## A1 — Server vs client components
 
 - `app/(public)/page.tsx` → **Server Component**. Fetches services directly from DB via Prisma. ISR with `revalidate=3600`. No browser APIs needed.
+- `app/(public)/error.tsx` → **Client Component**. Error boundary for the public site. Uses `useState` hooks. Needs interactivity for the reset/retry button.
 - `app/(auth)/login/page.tsx` → **Server Component**. Checks session, renders client form. Minimal.
 - `app/(auth)/signup/page.tsx` → **Server Component**. Same pattern as login.
 - `app/(dashboard)/layout.tsx` → **Server Component**. Auth guard — calls `auth()` and redirects if unauthenticated. Wraps children in `DashboardShell` (client component for session context and sidebar).
-- `app/(dashboard)/dashboard/page.tsx` → **Server Component**. Fetches requests from DB via Prisma. Passes data to `RequestListClient`.
+- `app/(dashboard)/loading.tsx` → **Server Component** (RSC). Renders skeletons — no interactivity needed, pure markup.
+- `app/(dashboard)/error.tsx` → **Client Component**. Error boundary. Uses hooks for the reset/retry button.
+- `app/(dashboard)/dashboard/page.tsx` → **Server Component**. Fetches requests from DB via Prisma. Passes data to `DashboardHomeClient`.
+- `app/(dashboard)/dashboard/requests/page.tsx` → **Server Component**. Fetches requests from DB via Prisma. Passes data to `RequestsPageClient`.
 - `app/(dashboard)/dashboard/new/page.tsx` → **Server Component**. Renders `RequestForm` client component.
 - `app/(dashboard)/dashboard/[id]/edit/page.tsx` → **Server Component**. Fetches single request with ownership check, passes to `RequestForm`.
-- `app/(dashboard)/dashboard/insights/page.tsx` → **Server Component**. Runs all DB aggregations, passes results to `InsightsClient`.
-- `src/components/app/request-list-client.tsx` → **Client Component**. Manages local state (compact toggle, error). Renders list.
-- `src/components/app/request-row.tsx` → **Client Component**. Uses `useOptimistic` for status changes. Handles delete via dialog.
+- `src/components/app/landing-services.tsx` → **Server Component**. Receives services as props from parent page component. Pure rendering, no client hooks.
+- `src/components/app/landing-contact.tsx` → **Server Component**. Pure rendering, no interactivity beyond a mailto link.
 - `src/components/app/request-form.tsx` → **Client Component**. Uses `react-hook-form` with Zod resolver. Calls server actions.
 - `src/components/app/login-form.tsx` → **Client Component**. Calls `signIn` from next-auth.
 - `src/components/app/signup-form.tsx` → **Client Component**. Calls signup API, then auto-signs in.
-- `src/components/app/insights-client.tsx` → **Client Component**. Renders Recharts charts. Reads CSS variables for theme-aware colors.
 - `src/components/app/sidebar.tsx` → **Client Component**. Uses `useSession`, `usePathname` for active state.
 - `src/components/app/theme-toggle.tsx` → **Client Component**. Uses `useTheme` from next-themes.
 - `src/components/app/command-palette.tsx` → **Client Component**. cmdk-based keyboard navigation.
 - `src/components/app/dashboard-shell.tsx` → **Client Component**. Wraps sidebar + content in SessionProvider.
+- `src/components/app/requests-table.tsx` → **Client Component**. Uses `useOptimistic`, `useTransition`, and `@tanstack/react-table` hooks.
+- `src/components/app/empty-state.tsx` → **Client Component**. Uses framer-motion for entrance animation.
+- `src/components/app/inline-error.tsx` → **Client Component**. Uses `useEffect` for auto-dismiss timer.
 
 ## A2 — Rendering strategy for the public landing page
 
@@ -48,7 +53,7 @@ If services were updated more frequently, SSR would be appropriate. For a market
 ## A5 — Security
 
 | Attack | Defense | File |
-|---|---|---|
+|---|---|---|---|
 | Unauthenticated dashboard access | `middleware.ts` redirects, layout re-checks session | `src/middleware.ts`, `src/app/(dashboard)/layout.tsx` |
 | IDOR — reading another user's requests | All Prisma queries include `userId: session.user.id` | `src/actions/requests.ts` |
 | Direct API calls bypassing UI | Every server action calls `auth()` before any DB operation | `src/actions/requests.ts` |
@@ -56,6 +61,7 @@ If services were updated more frequently, SSR would be appropriate. For a market
 | XSS | React escapes all output by default; no `dangerouslySetInnerHTML` used | All components |
 | Secrets in client bundle | All sensitive env vars are server-only (no `NEXT_PUBLIC_` prefix) | `.env.example` |
 | Weak passwords | Zod enforces min 8 chars; bcrypt with cost 12 hashes before storage | `src/lib/validations.ts`, `src/app/api/auth/signup/route.ts` |
+| Unhandled errors crashing the UI | `error.tsx` boundaries catch thrown errors and show a retry UI instead of a blank white screen | `src/app/(dashboard)/error.tsx`, `src/app/(public)/error.tsx` |
 
 ## A6 — Deployment
 
@@ -84,3 +90,5 @@ At 1,000 concurrent clicks, Groq's free tier (30 req/min) would rate-limit ~97% 
 - [ ] No `.env` committed to the repo
 - [ ] Test: log out, try to visit `/dashboard` directly — must redirect to `/login`
 - [ ] Test: log in as User A, try `/dashboard/[id]` with User B's request ID — must 404 or 403
+- [ ] Loading skeleton shows while dashboard data is fetching
+- [ ] Error boundary renders a retry button instead of a blank page when a DB query fails

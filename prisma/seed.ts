@@ -41,6 +41,9 @@ async function main() {
     })
   }
 
+  // Remove existing requests so the seed is idempotent
+  await db.projectRequest.deleteMany()
+
   const requests = [
     {
       title: 'Rebrand homepage',
@@ -84,7 +87,7 @@ async function main() {
   }
 
   console.log('Seed completed successfully')
-  console.log('Demo users:')
+  console.log('Users:')
   console.log('  demo@hortensia.com / password123')
   console.log('  client@hortensia.com / password123')
 }

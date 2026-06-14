@@ -9,30 +9,30 @@ Next.js 16 · TypeScript · Tailwind CSS · shadcn/ui · Prisma · PostgreSQL ·
 ## Quick start (under 5 minutes)
 
 ### Prerequisites
+
 - Node.js 20+
 - pnpm (`npm i -g pnpm`)
 - Docker Desktop
 
 ### Steps
 
-1. Clone and install:
-   ```bash
-   git clone <your-repo-url> && cd hortensia-portal
-   pnpm install
-   ```
+```bash
+# 1. Clone and install
+git clone <your-repo-url> && cd hortensia-portal
+pnpm install
 
-2. Configure environment:
-   ```bash
-   cp .env.example .env
-   # Generate a secret: openssl rand -base64 32
-   # Paste it as NEXTAUTH_SECRET in .env
-   ```
+# 2. Configure environment
+cp .env.example .env
 
-3. Start the database and start the dev server:
-   ```bash
-   docker compose up -d
-   pnpm dev
-   ```
+# 3. Start PostgreSQL
+docker compose up -d
+
+# 4. Run migrations and seed
+pnpm setup
+
+# 5. Start the dev server
+pnpm dev
+```
 
 Visit [http://localhost:3000](http://localhost:3000)
 
@@ -43,16 +43,14 @@ Visit [http://localhost:3000](http://localhost:3000)
 | demo@hortensia.com | password123 | Has 3 sample requests |
 | client@hortensia.com | password123 | Has 2 sample requests |
 
-## Production build
+## Scripts
 
-```bash
-docker build -t hortensia-portal .
-docker run -p 3000:3000 \
-  -e DATABASE_URL="your-prod-db-url" \
-  -e NEXTAUTH_SECRET="your-secret" \
-  -e NEXTAUTH_URL="https://your-domain.com" \
-  hortensia-portal
-```
+| Command | Description |
+|---|---|
+| `pnpm dev` | Start the dev server |
+| `pnpm build` | Build for production |
+| `pnpm setup` | Generate Prisma client + run migrations + seed data |
+| `pnpm prisma:seed` | Re-run the database seed |
 
 ## Infrastructure
 
@@ -60,12 +58,13 @@ docker run -p 3000:3000 \
 
 ```bash
 docker compose up -d
-cp .env.example .env   # fill in values, especially NEXTAUTH_SECRET
+cp .env.example .env
 pnpm install
+pnpm setup
 pnpm dev
 ```
 
-### Production build
+### Docker build
 
 ```bash
 docker build -t hortensia-portal .
@@ -88,7 +87,6 @@ Deploy on Vercel (free) + Neon (free PostgreSQL).
 #### Step 2 — Push the project to GitHub
 
 ```bash
-# Create a repo on github.com, then:
 git remote add origin https://github.com/<your-username>/hortensia-portal.git
 git push -u origin main
 ```
@@ -102,22 +100,20 @@ git push -u origin main
 | Variable | Value |
 |---|---|
 | `DATABASE_URL` | Your Neon connection string (from step 1) |
-| `NEXTAUTH_SECRET` | `openssl rand -base64 32` (run this in your terminal) |
-| `NEXTAUTH_URL` | `https://your-project.vercel.app` (you'll get this URL after deploy) |
+| `NEXTAUTH_SECRET` | `openssl rand -base64 32` |
+| `NEXTAUTH_URL` | `https://your-project.vercel.app` |
 | `GROQ_API_KEY` | Your Groq API key (or leave placeholder) |
 
 4. Click **Deploy**
 
 #### Step 4 — Run database migrations
 
-After the first deploy succeeds, open a terminal and run:
+After deploy succeeds, run:
 
 ```bash
-npx prisma migrate deploy --schema=prisma/schema.prisma
-npx prisma db seed --schema=prisma/schema.prisma
+npx prisma migrate deploy
+npx prisma db seed
 ```
-
-Set `DATABASE_URL` to your Neon connection string for these commands.
 
 #### Step 5 — Done
 

@@ -122,9 +122,6 @@ export async function deleteRequest(id: string) {
 }
 
 export async function getServices() {
-  const session = await auth()
-  if (!session?.user?.id) return { error: 'Unauthorized' }
-
   const services = await db.service.findMany({
     orderBy: { order: 'asc' },
   })

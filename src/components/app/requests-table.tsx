@@ -207,7 +207,8 @@ export function RequestsTable({ requests }: { requests: Request[] }) {
                 <DialogFooter>
                   <Button variant="outline" type="button">Cancel</Button>
                   <Button
-                    variant="destructive"
+                    variant="outline"
+                    className="text-[var(--red)] hover:bg-[var(--red-soft)]"
                     onClick={async () => {
                       const result = await deleteRequest(row.original.id)
                       if (result.error) {

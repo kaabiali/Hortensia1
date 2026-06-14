@@ -107,6 +107,8 @@ export function RequestForm({ defaultValues, requestId }: RequestFormProps) {
     setAiError(null)
   }
 
+  const [success, setSuccess] = useState(false)
+
   async function onSubmit(data: FormValues) {
     const formData = new FormData()
     formData.append('title', data.title)
@@ -126,8 +128,11 @@ export function RequestForm({ defaultValues, requestId }: RequestFormProps) {
       return
     }
 
-    router.push('/dashboard')
-    router.refresh()
+    setSuccess(true)
+    setTimeout(() => {
+      router.push('/dashboard')
+      router.refresh()
+    }, 1200)
   }
 
   return (
@@ -247,6 +252,13 @@ export function RequestForm({ defaultValues, requestId }: RequestFormProps) {
             <p className="text-sm text-[var(--red)]">
               {form.formState.errors.root.message}
             </p>
+          )}
+
+          {success && (
+            <div className="flex items-center gap-2 rounded-lg border border-[var(--success)]/30 bg-[var(--success)]/10 px-4 py-3 text-sm text-[var(--success)]">
+              <Check className="h-4 w-4" />
+              {requestId ? 'Request updated successfully' : 'Request created successfully'}
+            </div>
           )}
 
           <div className="flex items-center gap-3">

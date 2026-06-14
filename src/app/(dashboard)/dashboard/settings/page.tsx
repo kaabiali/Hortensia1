@@ -23,8 +23,6 @@ export default async function SettingsPage() {
           { label: 'Profile', description: 'Your name, email, and avatar' },
           { label: 'Notifications', description: 'Email and in-app notification preferences' },
           { label: 'Appearance', description: 'Theme, density, and display options' },
-          { label: 'Billing', description: 'Plan, payment methods, and invoices' },
-          { label: 'Team', description: 'Manage team members and permissions' },
         ].map((item) => (
           <div
             key={item.label}

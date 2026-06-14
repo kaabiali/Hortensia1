@@ -42,7 +42,6 @@ export function LandingHero() {
               <Button size="lg" className="h-11 px-6 text-base shadow-sm" asChild>
                 <Link href="/signup">
                   Start free trial
-                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
 
