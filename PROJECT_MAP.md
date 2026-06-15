@@ -54,6 +54,6 @@ Client form → POST /api/ai/improve → Groq API (server-side)
 ## [ORPHANS & PENDING]
 
 - Live deploy URL pending — not yet deployed to any host
-- Prisma datasource currently set to SQLite for local dev without Docker; switch to PostgreSQL in `prisma/schema.prisma` and `.env` for production use
+- Prisma datasource: PostgreSQL (via Docker Compose)
 - Groq streaming: deferred — non-streaming implementation used (< 20 lines overhead for streaming)
 - BullMQ queue: not implemented, noted in ARCHITECTURE.md (A7 — AI Stretch Task)

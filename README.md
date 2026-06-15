@@ -87,7 +87,7 @@ Deploy on Vercel (free) + Neon (free PostgreSQL).
 #### Step 2 — Push the project to GitHub
 
 ```bash
-git remote add origin https://github.com/<your-username>/hortensia-portal.git
+git remote add origin https://github.com/kaabiali/Hortensia1.git
 git push -u origin main
 ```
 

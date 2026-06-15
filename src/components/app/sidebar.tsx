@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
-  LayoutDashboard, Inbox, Plus, Settings, LogOut, Flower2, Menu, X
+  LayoutDashboard, Inbox, Plus, LogOut, Flower2, Menu, X
 } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
@@ -17,7 +17,6 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/requests', label: 'Requests', icon: Inbox },
   { href: '/dashboard/new', label: 'New Request', icon: Plus },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ]
 
 export function Sidebar() {

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   description: 'A private portal where you see exactly what\'s happening with your work.',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/favicon.ico',
   },
 }
 
