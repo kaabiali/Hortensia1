@@ -18,7 +18,7 @@ Next.js 16 · TypeScript · Tailwind CSS · shadcn/ui · Prisma · PostgreSQL ·
 
 ```bash
 # 1. Clone and install
-git clone <your-repo-url> && cd hortensia-portal
+git clone https://github.com/kaabiali/Hortensia1.git && cd Hortensia1
 pnpm install
 
 # 2. Configure environment
@@ -119,4 +119,4 @@ npx prisma db seed
 
 Your portal is live at `https://your-project.vercel.app`.
 
-URL: <!-- TODO: add deployed URL here -->
+**Live URL:** [`https://hortensia1.vercel.app`](https://hortensia1.vercel.app)
