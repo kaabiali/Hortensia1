@@ -42,7 +42,7 @@ Next.js standalone     →  serves on :3000
 
 **Auth flow:**
 ```
-/login  →  Credentials provider  →  JWT token  →  proxy.ts guards /dashboard/*
+/login  →  Credentials provider  →  JWT token  →  middleware.ts guards /dashboard/*
 ```
 
 **AI Improve flow:**
